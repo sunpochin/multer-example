@@ -13,14 +13,14 @@ var storage = multer.diskStorage({
 	},
 });
 //const upload = multer({ dest: 'uploads/' }).single('demo_image');
-//var upload = multer({ storage: storage }).single('demo_image');
-var upload = multer({ storage: storage }).array('images');
+var upload = multer({ storage: storage }).single('file');
+var multi = multer({ storage: storage }).array('files');
 
 app.get('/', (req, res) => {
 	res.send('hello world');
 });
 
-app.post('/image', (req, res) => {
+app.post('/file', (req, res) => {
 	upload(req, res, (err) => {
 		if (err) {
 			res.status(400).send('Something went wrong!');
@@ -30,13 +30,7 @@ app.post('/image', (req, res) => {
 });
 
 // uploading multiple images together
-app.post('/images', upload, (req, res) => {
-	// try {
-	// 	res.send(req.files);
-	// } catch (error) {
-	// 	console.log(error);
-	// 	res.send(400);
-	// }
+app.post('/files', multi, (req, res) => {
 	const files = req.files;
 	if (!files) {
 		const error = new Error('Please choose files');
